@@ -13,45 +13,45 @@ st.set_page_config(
 )
 
 
-def render_web_ui():
-    web_ui_dir = os.path.join(os.path.dirname(__file__), "web-ui")
-    index_path = os.path.join(web_ui_dir, "index.html")
-    css_path = os.path.join(web_ui_dir, "styles.css")
-    js_path = os.path.join(web_ui_dir, "script.js")
+#  def render_web_ui():
+#     web_ui_dir = os.path.join(os.path.dirname(__file__), "web-ui")
+#     index_path = os.path.join(web_ui_dir, "index.html")
+#     css_path = os.path.join(web_ui_dir, "styles.css")
+#     js_path = os.path.join(web_ui_dir, "script.js")
 
-    if not all(os.path.exists(path) for path in [index_path, css_path, js_path]):
-        return False
+#     if not all(os.path.exists(path) for path in [index_path, css_path, js_path]):
+#         return False
 
-    with open(index_path, "r", encoding="utf-8") as file:
-        html = file.read()
-    with open(css_path, "r", encoding="utf-8") as file:
-        css = file.read()
-    with open(js_path, "r", encoding="utf-8") as file:
-        js = file.read()
+#     with open(index_path, "r", encoding="utf-8") as file:
+#         html = file.read()
+#     with open(css_path, "r", encoding="utf-8") as file:
+#         css = file.read()
+#     with open(js_path, "r", encoding="utf-8") as file:
+#         js = file.read()
 
-    html = html.replace('<link rel="stylesheet" href="styles.css">', f"<style>{css}</style>")
-    html = html.replace('<script src="script.js"></script>', f"<script>{js}</script>")
-    st.markdown(
-        """
-        <style>
-        .stApp { background: #f5f7f5; }
-        .block-container { padding: 0; max-width: 100%; }
-        header[data-testid="stHeader"],
-        div[data-testid="stToolbar"],
-        div[data-testid="stDecoration"],
-        #MainMenu,
-        footer { display: none; }
-        iframe { display: block; }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-    components.html(html, height=820, scrolling=True)
-    return True
+#     html = html.replace('<link rel="stylesheet" href="styles.css">', f"<style>{css}</style>")
+#     html = html.replace('<script src="script.js"></script>', f"<script>{js}</script>")
+#     st.markdown(
+#         """
+#         <style>
+#         .stApp { background: #f5f7f5; }
+#         .block-container { padding: 0; max-width: 100%; }
+#         header[data-testid="stHeader"],
+#         div[data-testid="stToolbar"],
+#         div[data-testid="stDecoration"],
+#         #MainMenu,
+#         footer { display: none; }
+#         iframe { display: block; }
+#         </style>
+#         """,
+#         unsafe_allow_html=True,
+#     )
+#     components.html(html, height=820, scrolling=True)
+#     return True
 
 
-if render_web_ui():
-    st.stop()
+# if render_web_ui():
+#     st.stop() 
 
 
 import pandas as pd
@@ -110,20 +110,41 @@ foods_df = pd.DataFrame(foods_data)
 # =========================
 # NHẬN DIỆN MÓN ĂN FOOD-101
 # =========================
-FOOD101_MODEL_PATH = "model/food101_model.h5"
-FOOD101_CLASS_PATH = "model/food101_class_names.json"
+FOOD101_MODEL_PATH = "model/food101_model.keras"
+FOOD101_CLASS_PATH = "model/food101_class_names.json"   
 
 FOOD101_TO_VIETNAMESE = {
-    "pho": "Phở bò",
+    "pho": "Phở",
     "fried_rice": "Cơm chiên",
     "ramen": "Mì ramen",
     "pizza": "Pizza",
     "sushi": "Sushi",
     "hamburger": "Hamburger",
     "chicken_wings": "Gà rán",
-    "greek_salad": "Salad ức gà",
+    "greek_salad": "Salad rau củ",
     "ice_cream": "Kem",
-    "donuts": "Bánh donut"
+    "donuts": "Bánh donut",
+    
+    "spring_rolls": "Chả giò / Nem rán",
+    "dumplings": " Há cảo / Bánh bao",
+    "french_fries": "Khoai tây chiên",
+    "hot_dog": "Xúc xích",
+    "steak": "Bít tết",
+    "omelette": "Trứng ốp lết",
+    "tacos": "Bánh Taco",
+    "pork_chop": "Sườn heo",
+    "pancakes": "Bánh Pancake",
+    "hot_and_sour_soup": "Súp",
+    "lasagna": "Mì Ý",
+    "chocolate_cake": "Bánh Socola",
+    "cheesecake": "Bánh Phô mai",
+    "garlic_bread": "Bánh mì bơ tỏi",
+    "club_sandwich": "Bánh mì Sandwich",
+    "pad_thai": "Phở xào",
+    "spaghetti_bolognese": "Mì Ý",
+    "mussels": "Nghêu hấp/nướng",
+    "nachos": "Bánh Nachos",
+    "fish_and_chips": "Cá và khoai tây chiên"
 }
 
 
@@ -684,83 +705,83 @@ with tab5:
     with col_data3:
         avg_calories = foods_df["Calo"].mean()
         st.metric("Calo trung bình", f"{avg_calories:.0f} kcal")
-        # =========================
+# =========================
 # TAB 6 - NHẬN DIỆN MÓN ĂN
 # =========================
 with tab6:
     st.header("📷 Nhận diện món ăn qua ảnh")
 
     st.write(
-        "Chức năng này sử dụng mô hình AI có sẵn để nhận diện món ăn từ ảnh mà không cần huấn luyện lại dữ liệu."
+        "Chức năng này sử dụng AI (MobileNetV2) để phân tích hình ảnh và nhận diện món ăn."
     )
+    
+    # Tải mô hình AI lên 
+    model, class_names = load_food101_model()
 
-    uploaded_file = st.file_uploader(
-        "Upload ảnh món ăn",
-        type=["jpg", "jpeg", "png"]
-    )
+    if model is None:
+        st.error("⚠️ Chưa tìm thấy mô hình AI. Vui lòng kiểm tra lại thư mục 'model' đã có file .h5 chưa.")
+    else:
+        uploaded_file = st.file_uploader(
+            "Upload ảnh món ăn",
+            type=["jpg", "jpeg", "png"]
+        )
 
-    if uploaded_file is not None:
-        with st.spinner("AI đang phân tích ảnh món ăn..."):
-            image, predicted_food, confidence, all_results = predict_food_zero_shot(uploaded_file)
+        if uploaded_file is not None:
+            with st.spinner("AI đang phân tích ảnh món ăn..."):
+                # GỌI ĐÚNG HÀM NHẬN DIỆN 
+                image, predicted_food, confidence, all_results = predict_food101(uploaded_file, model, class_names)
 
-        col_img, col_result = st.columns([1, 1])
+            col_img, col_result = st.columns([1, 1])
 
-        with col_img:
-            st.image(image, caption="Ảnh món ăn đã upload", use_container_width=True)
+            with col_img:
+                st.image(image, caption="Ảnh món ăn đã upload", use_container_width=True)
 
-        with col_result:
-            st.subheader("Kết quả nhận diện")
-            st.success(f"Món ăn dự đoán: **{predicted_food}**")
-            st.write(f"Độ tin cậy: **{confidence:.2f}%**")
+            with col_result:
+                st.subheader("Kết quả nhận diện")
+                st.success(f"Món ăn dự đoán: **{predicted_food}**")
+                st.write(f"Độ tin cậy: **{confidence:.2f}%**")
 
-            food_info = foods_df[foods_df["Tên món"] == predicted_food]
+                food_info = foods_df[foods_df["Tên món"] == predicted_food]
 
-            if not food_info.empty:
-                row = food_info.iloc[0]
+                if not food_info.empty:
+                    row = food_info.iloc[0]
 
-                st.markdown("### Thông tin dinh dưỡng ước tính")
-                st.write(f"**Calo:** {row['Calo']} kcal")
-                st.write(f"**Protein:** {row['Protein']} g")
-                st.write(f"**Carb:** {row['Carb']} g")
-                st.write(f"**Fat:** {row['Fat']} g")
-                st.write(f"**Nhóm món:** {row['Nhóm']}")
-                st.write(f"**Phù hợp:** {row['Phù hợp']}")
+                    st.markdown("### Thông tin dinh dưỡng ước tính")
+                    st.write(f"**Calo:** {row['Calo']} kcal")
+                    st.write(f"**Protein:** {row['Protein']} g")
+                    st.write(f"**Carb:** {row['Carb']} g")
+                    st.write(f"**Fat:** {row['Fat']} g")
+                    st.write(f"**Nhóm món:** {row['Nhóm']}")
+                    st.write(f"**Phù hợp:** {row['Phù hợp']}")
 
-                if row["Phù hợp"] == "Hạn chế":
-                    st.error("Món này nên hạn chế nếu bạn đang giảm cân hoặc cần kiểm soát calo.")
-                elif row["Phù hợp"] == "Giảm cân":
-                    st.success("Món này khá phù hợp với mục tiêu kiểm soát cân nặng.")
-                elif row["Phù hợp"] == "Tăng cơ":
-                    st.info("Món này giàu protein, phù hợp với người muốn tăng cơ.")
+                    if row["Phù hợp"] == "Hạn chế":
+                        st.error("Món này nên hạn chế nếu bạn đang giảm cân hoặc cần kiểm soát calo.")
+                    elif row["Phù hợp"] == "Giảm cân":
+                        st.success("Món này khá phù hợp với mục tiêu kiểm soát cân nặng.")
+                    elif row["Phù hợp"] == "Tăng cơ":
+                        st.info("Món này giàu protein, phù hợp với người muốn tăng cơ.")
+                    else:
+                        st.info("Món này có thể dùng trong chế độ ăn cân bằng, nhưng vẫn cần chú ý khẩu phần.")
+
+                    if st.button("Thêm món này vào nhật ký ăn uống"):
+                        new_item = {
+                            "Thời gian": datetime.now().strftime("%H:%M:%S"),
+                            "Tên món": row["Tên món"],
+                            "Số phần": 1,
+                            "Calo": row["Calo"],
+                            "Protein": row["Protein"],
+                            "Carb": row["Carb"],
+                            "Fat": row["Fat"],
+                            "Nhóm": row["Nhóm"]
+                        }
+
+                        st.session_state.meal_log.append(new_item)
+                        st.success(f"Đã thêm {predicted_food} vào nhật ký ăn uống!")
                 else:
-                    st.info("Món này có thể dùng trong chế độ ăn cân bằng, nhưng vẫn cần chú ý khẩu phần.")
+                    st.warning("Món ăn được nhận diện nhưng chưa có trong bảng dữ liệu dinh dưỡng.")
 
-                if st.button("Thêm món này vào nhật ký ăn uống"):
-                    new_item = {
-                        "Thời gian": datetime.now().strftime("%H:%M:%S"),
-                        "Tên món": row["Tên món"],
-                        "Số phần": 1,
-                        "Calo": row["Calo"],
-                        "Protein": row["Protein"],
-                        "Carb": row["Carb"],
-                        "Fat": row["Fat"],
-                        "Nhóm": row["Nhóm"]
-                    }
-
-                    st.session_state.meal_log.append(new_item)
-                    st.success(f"Đã thêm {predicted_food} vào nhật ký ăn uống!")
-            else:
-                st.warning("Món ăn được nhận diện nhưng chưa có trong bảng dữ liệu dinh dưỡng.")
-
-        st.markdown("### Top kết quả AI dự đoán")
-
-        result_df = pd.DataFrame([
-            {
-                "Nhãn AI": item["label"],
-                "Món tương ứng": LABEL_TO_FOOD_NAME.get(item["label"], item["label"]),
-                "Độ tin cậy (%)": round(item["score"] * 100, 2)
-            }
-            for item in all_results
-        ])
-
-        st.dataframe(result_df, use_container_width=True)
+            st.markdown("### Top kết quả AI dự đoán")
+            
+            # Cập nhật lại format bảng cho khớp với all_results 
+            result_df = pd.DataFrame(all_results)
+            st.dataframe(result_df, use_container_width=True)
