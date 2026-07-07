@@ -1,7 +1,6 @@
 [
     "pho",
     "fried_rice",
-    "ramen",
     "pizza",
     "sushi",
     "hamburger",
@@ -19,14 +18,11 @@
     "pork_chop",
     "pancakes",
     "hot_and_sour_soup",
-    "lasagna",
     "chocolate_cake",
     "cheesecake",
-    "garlic_bread",
     "club_sandwich",
     "pad_thai",
     "spaghetti_bolognese",
     "mussels",
-    "nachos",
-    "fish_and_chips"
+    "nachos"
 ]

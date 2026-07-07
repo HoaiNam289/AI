@@ -3,17 +3,18 @@ import json
 import tensorflow as tf
 import tensorflow_datasets as tfds
 from tensorflow.keras import layers, models
-from tensorflow.keras.applications import MobileNetV2
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from tensorflow.keras.applications import EfficientNetB0
+from tensorflow.keras.applications.efficientnet import preprocess_input
 
 # =========================
-# 1. CẤU HÌNH VÀ THIẾT LẬP (BẢN NÂNG CẤP 30 MÓN)
+# 1. CẤU HÌNH VÀ THIẾT LẬP (BẢN ĐẠI TU: HỌC BỔ TÚC + ĐÁNH LỪA THỊ GIÁC)
 # =========================
-DATA_DIR = 'C:/AI_Data/tfds_data'  # Kho chứa dữ liệu trên máy bạn
+DATA_DIR = 'C:/AI_Data/tfds_data'  # Kho chứa dữ liệu gốc từ Google
+LOCAL_DATA_DIR = 'C:/AI_Data/local_data' # Kho chứa ảnh Việt Nam do bạn tự thêm
 MODEL_DIR = "model"
 IMG_SIZE = (224, 224)
 BATCH_SIZE = 32
-EPOCHS = 10  # Tăng lên 10 vòng vì 30 món cần thời gian học kỹ hơn
+EPOCHS = 10 
 
 os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
@@ -24,18 +25,33 @@ gpus = tf.config.list_physical_devices('GPU')
 if gpus:
     print(f"✅ Đã tìm thấy GPU: {gpus}. Bắt đầu tăng tốc!")
 
-# Danh sách 30 món ăn từ Á sang Âu
+# Danh sách chuẩn khớp 100% với từ điển của bạn
 SELECTED_CLASSES = [
-    "pho", "fried_rice", "ramen", "pizza", "sushi", 
+    "pho", "fried_rice", "pizza", "sushi", 
     "hamburger", "chicken_wings", "greek_salad", "ice_cream", "donuts",
     "spring_rolls", "dumplings", "french_fries", "hot_dog", "steak",
     "omelette", "tacos", "pork_chop", "pancakes", "hot_and_sour_soup",
-    "lasagna", "chocolate_cake", "cheesecake", "garlic_bread", "club_sandwich",
-    "pad_thai", "spaghetti_bolognese", "mussels", "nachos", "fish_and_chips"
+    "chocolate_cake", "cheesecake", "club_sandwich",
+    "pad_thai", "spaghetti_bolognese", "mussels", "nachos"
 ]
 
+# Tự động tạo sẵn các thư mục rỗng để bạn bỏ ảnh Việt Nam vào sau này
+for split in ["train", "val"]:
+    for c in SELECTED_CLASSES:
+        os.makedirs(os.path.join(LOCAL_DATA_DIR, split, c), exist_ok=True)
+
+# ==========================================
+# 2. XÂY DỰNG LỚP ĐÁNH LỪA THỊ GIÁC (DATA AUGMENTATION)
+# ==========================================
+data_augmentation = tf.keras.Sequential([
+    layers.RandomFlip("horizontal"),       # Lật ảnh trái phải ngẫu nhiên
+    layers.RandomRotation(0.15),           # Xoay nghiêng 15%
+    layers.RandomZoom(0.15),               # Phóng to/thu nhỏ 15%
+    layers.RandomContrast(0.15)            # Chỉnh sáng tối ngẫu nhiên
+])
+
 # =========================
-# 2. LOAD VÀ TIỀN XỬ LÝ DỮ LIỆU
+# 3. LOAD VÀ TIỀN XỬ LÝ DỮ LIỆU GỐC
 # =========================
 print("Đang quét dữ liệu từ ổ C, vui lòng đợi...")
 (ds_train, ds_val), ds_info = tfds.load(
@@ -46,17 +62,14 @@ print("Đang quét dữ liệu từ ổ C, vui lòng đợi...")
     data_dir=DATA_DIR
 )
 
-# Ánh xạ ID món ăn từ bộ data gốc sang ID mới (từ 0 đến 29)
 all_class_names = ds_info.features["label"].names
 selected_class_ids = [all_class_names.index(c) for c in SELECTED_CLASSES]
 id_to_new_id = {old_id: new_id for new_id, old_id in enumerate(selected_class_ids)}
 
 def filter_selected_classes(image, label):
-    # Lọc bỏ những ảnh không nằm trong 30 món đã chọn
     return tf.reduce_any(tf.equal(label, selected_class_ids))
 
 def preprocess(image, label):
-    # Đổi label, chỉnh kích thước ảnh về 224x224 và mã hóa One-Hot
     new_label = tf.py_function(func=lambda x: id_to_new_id[int(x.numpy())], inp=[label], Tout=tf.int64)
     new_label.set_shape([])
     image = tf.image.resize(image, IMG_SIZE)
@@ -64,39 +77,75 @@ def preprocess(image, label):
     label_one_hot = tf.one_hot(new_label, depth=len(SELECTED_CLASSES))
     return image, label_one_hot
 
-# Đưa ảnh vào dây chuyền xử lý tốc độ cao
-train_ds = ds_train.filter(filter_selected_classes).map(preprocess, num_parallel_calls=tf.data.AUTOTUNE).shuffle(1000).batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
-val_ds = ds_val.filter(filter_selected_classes).map(preprocess, num_parallel_calls=tf.data.AUTOTUNE).batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
+tfds_train_ds = ds_train.filter(filter_selected_classes).map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
+tfds_val_ds = ds_val.filter(filter_selected_classes).map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
+
+# ==========================================
+# 4. KIỂM TRA VÀ TRỘN DỮ LIỆU HỌC BỔ TÚC
+# ==========================================
+def check_local_data(folder_path):
+    for c in SELECTED_CLASSES:
+        p = os.path.join(folder_path, c)
+        if os.path.exists(p) and any(os.scandir(p)):
+            return True
+    return False
+
+has_local_train = check_local_data(os.path.join(LOCAL_DATA_DIR, "train"))
+has_local_val = check_local_data(os.path.join(LOCAL_DATA_DIR, "val"))
+
+if has_local_train:
+    print("📊 Đang trộn dữ liệu ảnh vỉa hè Việt Nam vào tập Train...")
+    local_train_ds = tf.keras.utils.image_dataset_from_directory(
+        os.path.join(LOCAL_DATA_DIR, "train"), label_mode='categorical',
+        class_names=SELECTED_CLASSES, image_size=IMG_SIZE, batch_size=None
+    ).map(lambda x, y: (tf.cast(x, tf.float32), tf.cast(y, tf.float32)))
+    train_ds = tfds_train_ds.concatenate(local_train_ds)
+else:
+    train_ds = tfds_train_ds
+
+if has_local_val:
+    print("📊 Đang trộn dữ liệu ảnh vỉa hè Việt Nam vào tập Validation...")
+    local_val_ds = tf.keras.utils.image_dataset_from_directory(
+        os.path.join(LOCAL_DATA_DIR, "val"), label_mode='categorical',
+        class_names=SELECTED_CLASSES, image_size=IMG_SIZE, batch_size=None
+    ).map(lambda x, y: (tf.cast(x, tf.float32), tf.cast(y, tf.float32)))
+    val_ds = tfds_val_ds.concatenate(local_val_ds)
+else:
+    val_ds = tfds_val_ds
+
+# Tối ưu hóa đường truyền dữ liệu
+train_ds = train_ds.shuffle(2000).batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
+val_ds = val_ds.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 
 # Xuất danh sách 30 món ra file JSON để web đọc
 with open(os.path.join(MODEL_DIR, "food101_class_names.json"), "w", encoding="utf-8") as f:
     json.dump(SELECTED_CLASSES, f, ensure_ascii=False, indent=4)
 
 # =========================
-# 3. XÂY DỰNG MẠNG NEURAL (BỘ NÃO)
+# 5. XÂY DỰNG MẠNG NEURAL (BỘ NÃO)
 # =========================
-# Dùng bộ khung MobileNetV2 siêu nhẹ, chuyên dùng cho ứng dụng di động
-base_model = MobileNetV2(input_shape=(224, 224, 3), include_top=False, weights="imagenet")
+base_model = EfficientNetB0(input_shape=(224, 224, 3), include_top=False, weights="imagenet")
 base_model.trainable = False
 
 inputs = layers.Input(shape=(224, 224, 3))
-x = preprocess_input(inputs)
+x = data_augmentation(inputs)  # Ảnh đi qua máy nhào nặn làm méo trước
+x = preprocess_input(x)
 x = base_model(x, training=False)
 x = layers.GlobalAveragePooling2D()(x)
-x = layers.Dropout(0.3)(x)
-outputs = layers.Dense(len(SELECTED_CLASSES), activation="softmax")(x) # Lớp đầu ra 30 nơ-ron cho 30 món
+x = layers.Dropout(0.4)(x)     # Tăng mức độ khó để AI tập trung hơn
+outputs = layers.Dense(len(SELECTED_CLASSES), activation="softmax")(x) 
 
 model = models.Model(inputs, outputs)
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0005), loss="categorical_crossentropy", metrics=["accuracy"])
 
 # =========================
-# 4. BẮT ĐẦU HUẤN LUYỆN
+# 6. BẮT ĐẦU HUẤN LUYỆN
 # =========================
-print(f"\n🚀 Bắt đầu quá trình huấn luyện {len(SELECTED_CLASSES)} món ăn...")
+print(f"\n🚀 Bắt đầu quá trình huấn luyện nâng cao {len(SELECTED_CLASSES)} món ăn...")
 model.fit(train_ds, validation_data=val_ds, epochs=EPOCHS)
 
 # =========================
-# 5. LƯU THÀNH QUẢ
+# 7. LƯU THÀNH QUẢ
 # =========================
 model.save(os.path.join(MODEL_DIR, "food101_model.keras"))
-print("\n🎉 Train xong! File food101_model.keras đã cập nhật bộ não 30 món.")
+print("\n🎉 Đại tu hoàn tất! File food101_model.keras siêu cấp đã sẵn sàng lên sóng.")

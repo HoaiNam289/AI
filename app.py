@@ -82,7 +82,7 @@ foods_data = [
     {"Tên món": "Thịt bò áp chảo", "Calo": 250, "Protein": 26, "Carb": 0, "Fat": 15, "Nhóm": "Đạm", "Phù hợp": "Tăng cơ"},
     {"Tên món": "Cơm gạo lứt", "Calo": 111, "Protein": 2.6, "Carb": 23, "Fat": 0.9, "Nhóm": "Tinh bột", "Phù hợp": "Giảm cân"},
     {"Tên món": "Bánh mì trứng", "Calo": 450, "Protein": 16, "Carb": 55, "Fat": 18, "Nhóm": "Đồ ăn nhanh", "Phù hợp": "Giữ cân"},
-    {"Tên món": "Phở bò", "Calo": 430, "Protein": 25, "Carb": 55, "Fat": 12, "Nhóm": "Món Việt", "Phù hợp": "Giữ cân"},
+    {"Tên món": "Phở", "Calo": 430, "Protein": 25, "Carb": 55, "Fat": 12, "Nhóm": "Món Việt", "Phù hợp": "Giữ cân"},
     {"Tên món": "Bún bò Huế", "Calo": 550, "Protein": 28, "Carb": 65, "Fat": 18, "Nhóm": "Món Việt", "Phù hợp": "Giữ cân"},
     {"Tên món": "Cơm tấm sườn", "Calo": 700, "Protein": 30, "Carb": 85, "Fat": 25, "Nhóm": "Món Việt", "Phù hợp": "Tăng cân"},
     {"Tên món": "Gà rán", "Calo": 600, "Protein": 28, "Carb": 35, "Fat": 38, "Nhóm": "Đồ ăn nhanh", "Phù hợp": "Hạn chế"},
@@ -100,6 +100,24 @@ foods_data = [
     {"Tên món": "Hamburger", "Calo": 550, "Protein": 25, "Carb": 45, "Fat": 30, "Nhóm": "Đồ ăn nhanh", "Phù hợp": "Hạn chế"},
     {"Tên món": "Kem", "Calo": 210, "Protein": 3.5, "Carb": 24, "Fat": 11, "Nhóm": "Đồ ngọt", "Phù hợp": "Hạn chế"},
     {"Tên món": "Bánh donut", "Calo": 350, "Protein": 4, "Carb": 45, "Fat": 18, "Nhóm": "Đồ ngọt", "Phù hợp": "Hạn chế"},
+    {"Tên món": "Salad rau củ", "Calo": 100, "Protein": 2.0, "Carb": 10.0, "Fat": 5.0, "Nhóm": "Rau", "Phù hợp": "Giảm cân"},
+    {"Tên món": "Xúc xích / gỏi cuốn", "Calo": 150, "Protein": 6.0, "Carb": 15.0, "Fat": 7.0, "Nhóm": "Món chính", "Phù hợp": "Giữ cân"},
+    {"Tên món": "Há cảo / Bánh bao", "Calo": 250, "Protein": 8.0, "Carb": 35.0, "Fat": 8.0, "Nhóm": "Điểm tâm", "Phù hợp": "Giữ cân"},
+    {"Tên món": "Khoai tây chiên", "Calo": 312, "Protein": 3.0, "Carb": 41.0, "Fat": 15.0, "Nhóm": "Ăn vặt", "Phù hợp": "Hạn chế"},
+    {"Tên món": "Hot dog", "Calo": 290, "Protein": 10.0, "Carb": 24.0, "Fat": 17.0, "Nhóm": "Đồ ăn nhanh", "Phù hợp": "Hạn chế"},
+    {"Tên món": "Bít tết", "Calo": 400, "Protein": 45.0, "Carb": 0.0, "Fat": 22.0, "Nhóm": "Đạm", "Phù hợp": "Tăng cơ"},
+    {"Tên món": "Trứng ốp lết / Trứng chiên", "Calo": 150, "Protein": 12.0, "Carb": 1.0, "Fat": 11.0, "Nhóm": "Đạm", "Phù hợp": "Giảm cân"},
+    {"Tên món": "Bánh Taco", "Calo": 210, "Protein": 9.0, "Carb": 20.0, "Fat": 10.0, "Nhóm": "Món chính", "Phù hợp": "Giữ cân"},
+    {"Tên món": "Sườn heo", "Calo": 350, "Protein": 25.0, "Carb": 0.0, "Fat": 26.0, "Nhóm": "Món chính", "Phù hợp": "Giữ cân"},
+    {"Tên món": "Bánh Pancake", "Calo": 220, "Protein": 6.0, "Carb": 28.0, "Fat": 9.0, "Nhóm": "Đồ ngọt", "Phù hợp": "Hạn chế"},
+    {"Tên món": "Súp", "Calo": 120, "Protein": 6.0, "Carb": 15.0, "Fat": 4.0, "Nhóm": "Khai vị", "Phù hợp": "Giảm cân"},
+    {"Tên món": "Bánh Socola", "Calo": 350, "Protein": 4.0, "Carb": 45.0, "Fat": 16.0, "Nhóm": "Đồ ngọt", "Phù hợp": "Hạn chế"},
+    {"Tên món": "Bánh Phô mai", "Calo": 400, "Protein": 7.0, "Carb": 32.0, "Fat": 28.0, "Nhóm": "Đồ ngọt", "Phù hợp": "Hạn chế"},
+    {"Tên món": "Bánh mì kẹp", "Calo": 300, "Protein": 12.0, "Carb": 35.0, "Fat": 12.0, "Nhóm": "Món chính", "Phù hợp": "Giữ cân"},
+    {"Tên món": "Phở xào / Pad thái", "Calo": 400, "Protein": 15.0, "Carb": 50.0, "Fat": 15.0, "Nhóm": "Món chính", "Phù hợp": "Giữ cân"},
+    {"Tên món": "Mì Ý", "Calo": 350, "Protein": 12.0, "Carb": 45.0, "Fat": 12.0, "Nhóm": "Món chính", "Phù hợp": "Giữ cân"},
+    {"Tên món": "Nghêu hấp", "Calo": 100, "Protein": 15.0, "Carb": 3.0, "Fat": 2.0, "Nhóm": "Đạm", "Phù hợp": "Giảm cân"},
+    {"Tên món": "Bánh Nachos", "Calo": 350, "Protein": 8.0, "Carb": 40.0, "Fat": 18.0, "Nhóm": "Ăn vặt", "Phù hợp": "Hạn chế"}
 ]
 
 foods_df = pd.DataFrame(foods_data)
@@ -116,7 +134,6 @@ FOOD101_CLASS_PATH = "model/food101_class_names.json"
 FOOD101_TO_VIETNAMESE = {
     "pho": "Phở",
     "fried_rice": "Cơm chiên",
-    "ramen": "Mì ramen",
     "pizza": "Pizza",
     "sushi": "Sushi",
     "hamburger": "Hamburger",
@@ -124,27 +141,23 @@ FOOD101_TO_VIETNAMESE = {
     "greek_salad": "Salad rau củ",
     "ice_cream": "Kem",
     "donuts": "Bánh donut",
-    
-    "spring_rolls": "Chả giò / Nem rán",
-    "dumplings": " Há cảo / Bánh bao",
+    "spring_rolls": "Xúc xích / gỏi cuốn",
+    "dumplings": "Há cảo / Bánh bao",
     "french_fries": "Khoai tây chiên",
-    "hot_dog": "Xúc xích",
+    "hot_dog": "Hot dog",
     "steak": "Bít tết",
-    "omelette": "Trứng ốp lết",
+    "omelette": "Trứng ốp lết / Trứng chiên",
     "tacos": "Bánh Taco",
     "pork_chop": "Sườn heo",
     "pancakes": "Bánh Pancake",
     "hot_and_sour_soup": "Súp",
-    "lasagna": "Mì Ý",
     "chocolate_cake": "Bánh Socola",
     "cheesecake": "Bánh Phô mai",
-    "garlic_bread": "Bánh mì bơ tỏi",
-    "club_sandwich": "Bánh mì Sandwich",
-    "pad_thai": "Phở xào",
+    "club_sandwich": "Bánh mì kẹp",
+    "pad_thai": "Phở xào / Pad thái",
     "spaghetti_bolognese": "Mì Ý",
-    "mussels": "Nghêu hấp/nướng",
+    "mussels": "Nghêu hấp",
     "nachos": "Bánh Nachos",
-    "fish_and_chips": "Cá và khoai tây chiên"
 }
 
 
@@ -182,33 +195,11 @@ def predict_food101(uploaded_file, model, class_names):
     for index in top_indices:
         label = class_names[int(index)]
         top_results.append({
-            "Class AI": label,
             "Tên món hiển thị": FOOD101_TO_VIETNAMESE.get(label, label),
             "Độ tin cậy (%)": round(float(predictions[index]) * 100, 2)
         })
 
     return image, food_name, confidence, top_results
-FOOD_LABELS = [
-    "a photo of pho bo Vietnamese beef noodle soup",
-    "a photo of com tam suon Vietnamese broken rice with grilled pork",
-    "a photo of banh mi trung Vietnamese bread with egg",
-    "a photo of bun bo Hue Vietnamese spicy beef noodle soup",
-    "a photo of fried chicken",
-    "a photo of milk tea with tapioca pearls",
-    "a photo of chicken salad",
-    "a photo of instant noodles"
-]
-
-LABEL_TO_FOOD_NAME = {
-    "a photo of pho bo Vietnamese beef noodle soup": "Phở bò",
-    "a photo of com tam suon Vietnamese broken rice with grilled pork": "Cơm tấm sườn",
-    "a photo of banh mi trung Vietnamese bread with egg": "Bánh mì trứng",
-    "a photo of bun bo Hue Vietnamese spicy beef noodle soup": "Bún bò Huế",
-    "a photo of fried chicken": "Gà rán",
-    "a photo of milk tea with tapioca pearls": "Trà sữa",
-    "a photo of chicken salad": "Salad ức gà",
-    "a photo of instant noodles": "Mì tôm"
-}
 
 
 @st.cache_resource
@@ -218,23 +209,30 @@ def load_zero_shot_model():
         model="openai/clip-vit-base-patch32"
     )
 
-
-def predict_food_zero_shot(uploaded_file):
+def check_is_food_clip(uploaded_file):
+    """
+    Hàm này dùng CLIP để kiểm tra xem ảnh là đồ ăn hay là thứ khác (người, vật...)
+    Trả về True nếu là đồ ăn, False nếu là thứ khác.
+    """
     image = Image.open(uploaded_file).convert("RGB")
     classifier = load_zero_shot_model()
-
-    results = classifier(
-        image,
-        candidate_labels=FOOD_LABELS
-    )
-
-    best_result = results[0]
-    label = best_result["label"]
-    score = best_result["score"] * 100
-
-    food_name = LABEL_TO_FOOD_NAME.get(label, label)
-
-    return image, food_name, score, results
+    
+    gatekeeper_labels = [
+        "a close up photo of delicious food, a dish, or a meal",
+        "a photo of a person, face, animal, scenery, or random object"
+    ]
+    
+    # Cho CLIP phân loại
+    results = classifier(image, candidate_labels=gatekeeper_labels)
+    
+    # Lấy kết quả có độ tin cậy cao nhất (top 1)
+    best_label = results[0]["label"]
+    
+    # Nếu kết quả nghiêng về đồ ăn thì cho qua
+    if best_label == gatekeeper_labels[0]:
+        return True
+    else:
+        return False
 
 # =========================
 # HÀM XỬ LÝ
@@ -711,9 +709,6 @@ with tab5:
 with tab6:
     st.header("📷 Nhận diện món ăn qua ảnh")
 
-    st.write(
-        "Chức năng này sử dụng AI (MobileNetV2) để phân tích hình ảnh và nhận diện món ăn."
-    )
     
     # Tải mô hình AI lên 
     model, class_names = load_food101_model()
@@ -727,61 +722,75 @@ with tab6:
         )
 
         if uploaded_file is not None:
-            with st.spinner("AI đang phân tích ảnh món ăn..."):
-                # GỌI ĐÚNG HÀM NHẬN DIỆN 
-                image, predicted_food, confidence, all_results = predict_food101(uploaded_file, model, class_names)
-
-            col_img, col_result = st.columns([1, 1])
-
-            with col_img:
-                st.image(image, caption="Ảnh món ăn đã upload", use_container_width=True)
-
-            with col_result:
-                st.subheader("Kết quả nhận diện")
-                st.success(f"Món ăn dự đoán: **{predicted_food}**")
-                st.write(f"Độ tin cậy: **{confidence:.2f}%**")
-
-                food_info = foods_df[foods_df["Tên món"] == predicted_food]
-
-                if not food_info.empty:
-                    row = food_info.iloc[0]
-
-                    st.markdown("### Thông tin dinh dưỡng ước tính")
-                    st.write(f"**Calo:** {row['Calo']} kcal")
-                    st.write(f"**Protein:** {row['Protein']} g")
-                    st.write(f"**Carb:** {row['Carb']} g")
-                    st.write(f"**Fat:** {row['Fat']} g")
-                    st.write(f"**Nhóm món:** {row['Nhóm']}")
-                    st.write(f"**Phù hợp:** {row['Phù hợp']}")
-
-                    if row["Phù hợp"] == "Hạn chế":
-                        st.error("Món này nên hạn chế nếu bạn đang giảm cân hoặc cần kiểm soát calo.")
-                    elif row["Phù hợp"] == "Giảm cân":
-                        st.success("Món này khá phù hợp với mục tiêu kiểm soát cân nặng.")
-                    elif row["Phù hợp"] == "Tăng cơ":
-                        st.info("Món này giàu protein, phù hợp với người muốn tăng cơ.")
-                    else:
-                        st.info("Món này có thể dùng trong chế độ ăn cân bằng, nhưng vẫn cần chú ý khẩu phần.")
-
-                    if st.button("Thêm món này vào nhật ký ăn uống"):
-                        new_item = {
-                            "Thời gian": datetime.now().strftime("%H:%M:%S"),
-                            "Tên món": row["Tên món"],
-                            "Số phần": 1,
-                            "Calo": row["Calo"],
-                            "Protein": row["Protein"],
-                            "Carb": row["Carb"],
-                            "Fat": row["Fat"],
-                            "Nhóm": row["Nhóm"]
-                        }
-
-                        st.session_state.meal_log.append(new_item)
-                        st.success(f"Đã thêm {predicted_food} vào nhật ký ăn uống!")
+            # GỌI BẢO VỆ CLIP RA KIỂM TRA TRƯỚC
+            with st.spinner("🕵️ Đang quét kiểm tra hình ảnh..."):
+                is_food = check_is_food_clip(uploaded_file)
+                
+                if not is_food:
+                    # Bị chặn: Hiện cảnh báo và không làm gì thêm
+                    st.error("⚠️ Bíp bíp! Hình như đây không phải là ảnh ẩm thực (có thể là người, động vật hoặc phong cảnh). Vui lòng chọn ảnh món ăn nhé!")
+                    st.image(uploaded_file, caption="Ảnh không hợp lệ", width=400)
+                    
                 else:
-                    st.warning("Món ăn được nhận diện nhưng chưa có trong bảng dữ liệu dinh dưỡng.")
+                    # CHO QUA: CHẠY NHẬN DIỆN EFFICIENTNET NHƯ CŨ
+                    st.success("✅ Xác nhận là ảnh món ăn! Đang tiến hành phân tích sâu...")
+                    
+                    with st.spinner("🤖 AI đang phân tích chi tiết..."):
+                        # GỌI ĐÚNG HÀM NHẬN DIỆN
+                        image, predicted_food, confidence, all_results = predict_food101(uploaded_file, model, class_names)
+                    
+                    col_img, col_result = st.columns([1, 1])
+                    
+                    with col_img:
+                        st.image(image, caption="Ảnh món ăn đã upload", use_container_width=True)
+                        
+                    with col_result:
+                        st.subheader("Kết quả nhận diện")
+                        st.success(f"Món ăn dự đoán: **{predicted_food}**")
+                        st.write(f"Độ tin cậy: **{confidence:.2f}%**")
+                        
 
-            st.markdown("### Top kết quả AI dự đoán")
-            
-            # Cập nhật lại format bảng cho khớp với all_results 
-            result_df = pd.DataFrame(all_results)
-            st.dataframe(result_df, use_container_width=True)
+                        food_info = foods_df[foods_df["Tên món"] == predicted_food]
+
+                        if not food_info.empty:
+                            row = food_info.iloc[0]
+
+                            st.markdown("### Thông tin dinh dưỡng ước tính")
+                            st.write(f"**Calo:** {row['Calo']} kcal")
+                            st.write(f"**Protein:** {row['Protein']} g")
+                            st.write(f"**Carb:** {row['Carb']} g")
+                            st.write(f"**Fat:** {row['Fat']} g")
+                            st.write(f"**Nhóm món:** {row['Nhóm']}")
+                            st.write(f"**Phù hợp:** {row['Phù hợp']}")
+
+                            if row["Phù hợp"] == "Hạn chế":
+                                st.error("Món này nên hạn chế nếu bạn đang giảm cân hoặc cần kiểm soát calo.")
+                            elif row["Phù hợp"] == "Giảm cân":
+                                st.success("Món này khá phù hợp với mục tiêu kiểm soát cân nặng.")
+                            elif row["Phù hợp"] == "Tăng cơ":
+                                st.info("Món này giàu protein, phù hợp với người muốn tăng cơ.")
+                            else:
+                                st.info("Món này có thể dùng trong chế độ ăn cân bằng, nhưng vẫn cần chú ý khẩu phần.")
+
+                            if st.button("Thêm món này vào nhật ký ăn uống"):
+                                new_item = {
+                                    "Thời gian": datetime.now().strftime("%H:%M:%S"),
+                                    "Tên món": row["Tên món"],
+                                    "Số phần": 1,
+                                    "Calo": row["Calo"],
+                                    "Protein": row["Protein"],
+                                    "Carb": row["Carb"],
+                                    "Fat": row["Fat"],
+                                    "Nhóm": row["Nhóm"]
+                                }
+
+                                st.session_state.meal_log.append(new_item)
+                                st.success(f"Đã thêm {predicted_food} vào nhật ký ăn uống!")
+                        else:
+                            st.warning("Món ăn được nhận diện nhưng chưa có trong bảng dữ liệu dinh dưỡng.")
+
+                    st.markdown("### Top kết quả AI dự đoán")
+                    
+                    # Cập nhật lại format bảng cho khớp với all_results 
+                    result_df = pd.DataFrame(all_results)
+                    st.dataframe(result_df, use_container_width=True)
