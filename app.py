@@ -13,45 +13,45 @@ st.set_page_config(
 )
 
 
-#  def render_web_ui():
-#     web_ui_dir = os.path.join(os.path.dirname(__file__), "web-ui")
-#     index_path = os.path.join(web_ui_dir, "index.html")
-#     css_path = os.path.join(web_ui_dir, "styles.css")
-#     js_path = os.path.join(web_ui_dir, "script.js")
+def render_web_ui():
+    web_ui_dir = os.path.join(os.path.dirname(__file__), "web-ui")
+    index_path = os.path.join(web_ui_dir, "index.html")
+    css_path = os.path.join(web_ui_dir, "styles.css")
+    js_path = os.path.join(web_ui_dir, "script.js")
 
-#     if not all(os.path.exists(path) for path in [index_path, css_path, js_path]):
-#         return False
+    if not all(os.path.exists(path) for path in [index_path, css_path, js_path]):
+        return False
 
-#     with open(index_path, "r", encoding="utf-8") as file:
-#         html = file.read()
-#     with open(css_path, "r", encoding="utf-8") as file:
-#         css = file.read()
-#     with open(js_path, "r", encoding="utf-8") as file:
-#         js = file.read()
+    with open(index_path, "r", encoding="utf-8") as file:
+        html = file.read()
+    with open(css_path, "r", encoding="utf-8") as file:
+        css = file.read()
+    with open(js_path, "r", encoding="utf-8") as file:
+        js = file.read()
 
-#     html = html.replace('<link rel="stylesheet" href="styles.css">', f"<style>{css}</style>")
-#     html = html.replace('<script src="script.js"></script>', f"<script>{js}</script>")
-#     st.markdown(
-#         """
-#         <style>
-#         .stApp { background: #f5f7f5; }
-#         .block-container { padding: 0; max-width: 100%; }
-#         header[data-testid="stHeader"],
-#         div[data-testid="stToolbar"],
-#         div[data-testid="stDecoration"],
-#         #MainMenu,
-#         footer { display: none; }
-#         iframe { display: block; }
-#         </style>
-#         """,
-#         unsafe_allow_html=True,
-#     )
-#     components.html(html, height=820, scrolling=True)
-#     return True
+    html = html.replace('<link rel="stylesheet" href="styles.css">', f"<style>{css}</style>")
+    html = html.replace('<script src="script.js"></script>', f"<script>{js}</script>")
+    st.markdown(
+        """
+        <style>
+        .stApp { background: #f5f7f5; }
+        .block-container { padding: 0; max-width: 100%; }
+        header[data-testid="stHeader"],
+        div[data-testid="stToolbar"],
+        div[data-testid="stDecoration"],
+        #MainMenu,
+        footer { display: none; }
+        iframe { display: block; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+    components.html(html, height=900, scrolling=True)
+    return True
 
 
-# if render_web_ui():
-#     st.stop() 
+if render_web_ui():
+    st.stop()
 
 
 import pandas as pd

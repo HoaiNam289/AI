@@ -56,8 +56,46 @@ let userProfile = {
 };
 
 // --- STATE: Nhật ký ăn uống ---
-let mealLog = [];
+let mealLog = [
+  {
+    time: "07:30:12",
+    name: "Phở bò",
+    qty: 1,
+    calo: 430,
+    protein: 25,
+    carb: 55,
+    fat: 12,
+  },
+  {
+    time: "12:15:44",
+    name: "Cơm tấm sườn",
+    qty: 1,
+    calo: 700,
+    protein: 30,
+    carb: 85,
+    fat: 25,
+  },
+  {
+    time: "15:40:08",
+    name: "Sữa chua không đường",
+    qty: 1,
+    calo: 60,
+    protein: 4,
+    carb: 5,
+    fat: 3,
+  },
+  {
+    time: "18:25:31",
+    name: "Cá hấp",
+    qty: 1,
+    calo: 160,
+    protein: 25,
+    carb: 0,
+    fat: 5,
+  },
+];
 const PROFILE_STORAGE_KEY = "nutricare_user_profile";
+let selectedRecognitionFileName = "";
 
 // ===========================
 // KHỞI TẠO
@@ -332,6 +370,21 @@ function updateDashboard() {
 
   document.getElementById("dash-progress-text").textContent = progressPercent + "% calo mục tiêu";
 
+  var totalProtein = getTotalNutrient("protein");
+  var totalCarb = getTotalNutrient("carb");
+  var totalFat = getTotalNutrient("fat");
+  var macroMax = Math.max(totalProtein, totalCarb, totalFat, 1);
+
+  document.getElementById("dash-meal-count").textContent = mealLog.length + " món";
+  document.getElementById("dash-protein").textContent = Math.round(totalProtein) + "g";
+  document.getElementById("dash-carb").textContent = Math.round(totalCarb) + "g";
+  document.getElementById("dash-fat").textContent = Math.round(totalFat) + "g";
+  document.getElementById("dash-protein-bar").style.width = Math.round((totalProtein / macroMax) * 100) + "%";
+  document.getElementById("dash-carb-bar").style.width = Math.round((totalCarb / macroMax) * 100) + "%";
+  document.getElementById("dash-fat-bar").style.width = Math.round((totalFat / macroMax) * 100) + "%";
+
+  renderDashboardRecentMeals();
+
   // Cảnh báo
   var alertDiv = document.getElementById("dash-alert");
 
@@ -350,26 +403,112 @@ function updateDashboard() {
   }
 }
 
+function renderDashboardRecentMeals() {
+  var container = document.getElementById("dash-recent-meals");
+  if (!container) return;
+
+  if (mealLog.length === 0) {
+    container.innerHTML = '<div class="recent-meal-empty">Chưa có món ăn nào trong nhật ký.</div>';
+    return;
+  }
+
+  var recentItems = mealLog.slice(-4).reverse();
+  container.innerHTML = recentItems.map(function (item) {
+    return (
+      '<div class="recent-meal-item">' +
+        '<div>' +
+          '<strong>' + item.name + '</strong>' +
+          '<span>' + item.time + ' · ' + item.qty + ' phần</span>' +
+        '</div>' +
+        '<b>' + Math.round(item.calo) + ' kcal</b>' +
+      '</div>'
+    );
+  }).join("");
+}
+
 // ===========================
 // NHẬT KÝ ĂN UỐNG
 // ===========================
+function normalizeText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function findFoodByInput(input) {
+  var normalizedInput = normalizeText(input);
+  if (!normalizedInput) return null;
+
+  var exactMatch = foodsData.find(function (food) {
+    return normalizeText(food.name) === normalizedInput;
+  });
+  if (exactMatch) return exactMatch;
+
+  return foodsData.find(function (food) {
+    var normalizedName = normalizeText(food.name);
+    return normalizedName.includes(normalizedInput) || normalizedInput.includes(normalizedName);
+  }) || null;
+}
+
+function updateDiarySuggestion() {
+  var input = document.getElementById("diaryFood");
+  var box = document.getElementById("diarySuggestionBox");
+  var status = document.getElementById("diaryAddStatus");
+  var food = findFoodByInput(input.value);
+
+  status.textContent = "";
+  status.className = "form-status";
+
+  if (!input.value.trim()) {
+    box.className = "diary-suggestion-box";
+    box.textContent = "Gợi ý: nhập tên món để xem calo và dinh dưỡng ước tính.";
+    return null;
+  }
+
+  if (!food) {
+    box.className = "diary-suggestion-box warning";
+    box.textContent = "Chưa tìm thấy món này trong dữ liệu. Thử nhập: phở, cơm tấm, bánh mì, sushi, hamburger...";
+    return null;
+  }
+
+  box.className = "diary-suggestion-box success";
+  box.innerHTML =
+    "<strong>Gợi ý phù hợp: " + food.name + "</strong>" +
+    "<span>" + food.calo + " kcal · Protein " + food.protein + "g · Carb " + food.carb + "g · Fat " + food.fat + "g</span>";
+  return food;
+}
+
 function initDiary() {
-  // Nạp danh sách món vào select
-  var select = document.getElementById("diaryFood");
+  // Nạp danh sách món vào gợi ý nhập liệu
+  var input = document.getElementById("diaryFood");
+  var suggestions = document.getElementById("foodSuggestions");
   foodsData.forEach(function (food) {
     var option = document.createElement("option");
     option.value = food.name;
-    option.textContent = food.name + " (" + food.calo + " kcal)";
-    select.appendChild(option);
+    option.label = food.name + " (" + food.calo + " kcal)";
+    suggestions.appendChild(option);
   });
+
+  input.addEventListener("input", updateDiarySuggestion);
 
   // Nút thêm
   document.getElementById("btnAddDiary").addEventListener("click", function () {
-    var foodName = document.getElementById("diaryFood").value;
+    var foodName = input.value;
     var qty = parseFloat(document.getElementById("diaryQty").value) || 1;
+    var status = document.getElementById("diaryAddStatus");
 
-    var food = foodsData.find(function (f) { return f.name === foodName; });
-    if (!food) return;
+    var food = findFoodByInput(foodName);
+    if (!food) {
+      status.textContent = "Chưa tìm thấy món trong dữ liệu. Hãy chọn một món được gợi ý.";
+      status.className = "form-status error";
+      updateDiarySuggestion();
+      return;
+    }
 
     var now = new Date();
     var time = now.getHours().toString().padStart(2, "0") + ":" +
@@ -388,6 +527,10 @@ function initDiary() {
 
     renderDiary();
     updateDashboard();
+    input.value = "";
+    updateDiarySuggestion();
+    status.textContent = "Đã thêm " + food.name + " vào nhật ký.";
+    status.className = "form-status success";
   });
 
   // Nút xóa nhật ký
@@ -398,6 +541,8 @@ function initDiary() {
       updateDashboard();
     }
   });
+
+  renderDiary();
 }
 
 // Hiển thị bảng nhật ký
@@ -510,6 +655,8 @@ function handleImageFile(file) {
     return;
   }
 
+  selectedRecognitionFileName = file.name.toLowerCase();
+
   var reader = new FileReader();
   reader.onload = function (e) {
     document.getElementById("previewImg").src = e.target.result;
@@ -521,20 +668,28 @@ function handleImageFile(file) {
 
 // Giả lập nhận diện (demo)
 function simulateRecognition() {
-  // Danh sách kết quả mẫu
-  var sampleResults = [
-    { name: "Phở bò", confidence: 87.5 },
-    { name: "Gà rán", confidence: 82.3 },
-    { name: "Cơm tấm sườn", confidence: 91.2 },
-    { name: "Bún bò Huế", confidence: 78.6 },
-    { name: "Salad ức gà", confidence: 89.1 },
-    { name: "Bánh mì trứng", confidence: 85.4 },
-    { name: "Mì ramen", confidence: 76.8 },
-    { name: "Sushi", confidence: 83.7 },
+  var recognitionRules = [
+    { keywords: ["burger", "hamburger", "ham-burger"], name: "Hamburger", confidence: 91.8 },
+    { keywords: ["pho", "phobo", "pho-bo"], name: "Phở bò", confidence: 88.6 },
+    { keywords: ["bunbo", "bun-bo", "hue"], name: "Bún bò Huế", confidence: 86.4 },
+    { keywords: ["comtam", "com-tam", "suon"], name: "Cơm tấm sườn", confidence: 90.2 },
+    { keywords: ["garan", "ga-ran", "fried-chicken", "chicken"], name: "Gà rán", confidence: 84.9 },
+    { keywords: ["pizza"], name: "Pizza", confidence: 89.7 },
+    { keywords: ["sushi"], name: "Sushi", confidence: 87.3 },
+    { keywords: ["salad"], name: "Salad ức gà", confidence: 85.5 },
+    { keywords: ["ramen", "mi-ramen"], name: "Mì ramen", confidence: 83.1 },
+    { keywords: ["banhmi", "banh-mi", "banh", "bread", "sandwich", "baguette"], name: "Bánh mì trứng", confidence: 88.4 },
   ];
 
-  // Random một kết quả
-  var result = sampleResults[Math.floor(Math.random() * sampleResults.length)];
+  var result = recognitionRules.find(function (rule) {
+    return rule.keywords.some(function (keyword) {
+      return selectedRecognitionFileName.includes(keyword);
+    });
+  });
+
+  if (!result) {
+    result = { name: "Bánh mì trứng", confidence: 88.4 };
+  }
 
   // Tìm thông tin dinh dưỡng
   var food = foodsData.find(function (f) { return f.name === result.name; });
@@ -575,24 +730,64 @@ function simulateRecognition() {
 // Dữ liệu thực đơn theo mục tiêu
 var menuData = {
   "Giảm cân": {
-    breakfast: { food: "Yến mạch + Chuối + Sữa chua không đường", calo: "~540 kcal", note: "Giàu chất xơ, ít béo, no lâu" },
-    lunch: { food: "Cơm gạo lứt + Ức gà luộc + Rau luộc", calo: "~326 kcal", note: "Giàu protein nạc, ít tinh bột tinh chế" },
-    dinner: { food: "Cá hấp + Salad ức gà + Đậu hũ", calo: "~516 kcal", note: "Nhẹ bụng, đủ dưỡng chất cho buổi tối" },
+    calories: "1.450 - 1.650 kcal",
+    focus: "Ít calo",
+    note: "Nhiều rau, đạm nạc, giảm đồ chiên ngọt",
+    description: "Thực đơn ưu tiên món Việt dễ chuẩn bị, khẩu phần vừa phải và giàu chất xơ.",
+    days: [
+      { day: "Thứ 2", breakfast: "Yến mạch + chuối", lunch: "Cơm gạo lứt + ức gà + rau luộc", dinner: "Cá hấp + canh bí xanh", snack: "Sữa chua không đường", calo: "~1.520" },
+      { day: "Thứ 3", breakfast: "Bánh mì trứng ốp la", lunch: "Bún thịt nạc + rau sống", dinner: "Đậu hũ sốt cà + salad", snack: "Táo", calo: "~1.480" },
+      { day: "Thứ 4", breakfast: "Khoai lang + sữa tươi không đường", lunch: "Cơm trắng ít + cá kho + rau", dinner: "Ức gà áp chảo + súp rau", snack: "Chuối nhỏ", calo: "~1.560" },
+      { day: "Thứ 5", breakfast: "Phở bò ít bánh", lunch: "Cơm gạo lứt + thịt bò xào rau", dinner: "Cá hấp + rau luộc", snack: "Sữa chua", calo: "~1.620" },
+      { day: "Thứ 6", breakfast: "Trứng luộc + khoai lang", lunch: "Cơm trắng + đậu hũ + canh rau", dinner: "Salad ức gà", snack: "Táo", calo: "~1.430" },
+      { day: "Thứ 7", breakfast: "Bún gà xé", lunch: "Cơm gạo lứt + cá hấp + rau", dinner: "Canh chua cá + rau", snack: "Sữa tươi không đường", calo: "~1.590" },
+      { day: "Chủ nhật", breakfast: "Cháo yến mạch thịt bằm", lunch: "Gỏi cuốn + đậu hũ", dinner: "Ức gà + rau củ luộc", snack: "Chuối", calo: "~1.500" },
+    ],
   },
   "Giữ cân": {
-    breakfast: { food: "Bánh mì trứng + Sữa tươi không đường", calo: "~512 kcal", note: "Cung cấp năng lượng cân bằng" },
-    lunch: { food: "Cơm trắng + Cá hấp + Rau luộc", calo: "~340 kcal", note: "Bữa trưa đủ chất, không dư thừa" },
-    dinner: { food: "Cơm gạo lứt + Đậu hũ + Rau luộc", calo: "~237 kcal", note: "Nhẹ nhàng, dễ tiêu hóa" },
+    calories: "1.850 - 2.100 kcal",
+    focus: "Cân bằng",
+    note: "Đủ tinh bột, đạm, rau và chất béo tốt",
+    description: "Kế hoạch duy trì cân nặng với các bữa ăn quen thuộc, dễ theo dõi calo.",
+    days: [
+      { day: "Thứ 2", breakfast: "Bánh mì trứng + sữa tươi", lunch: "Cơm trắng + cá hấp + rau luộc", dinner: "Cơm gạo lứt + đậu hũ", snack: "Chuối", calo: "~1.900" },
+      { day: "Thứ 3", breakfast: "Phở bò", lunch: "Cơm gà luộc + canh rau", dinner: "Bún thịt nướng ít mỡ", snack: "Sữa chua", calo: "~2.050" },
+      { day: "Thứ 4", breakfast: "Xôi mặn phần nhỏ", lunch: "Cơm cá kho + rau xào", dinner: "Miến gà + rau", snack: "Táo", calo: "~1.980" },
+      { day: "Thứ 5", breakfast: "Bún bò Huế phần nhỏ", lunch: "Cơm tấm sườn + rau", dinner: "Canh chua cá + cơm ít", snack: "Sữa tươi", calo: "~2.100" },
+      { day: "Thứ 6", breakfast: "Yến mạch + chuối", lunch: "Cơm bò xào rau", dinner: "Đậu hũ + trứng + rau luộc", snack: "Sữa chua", calo: "~1.880" },
+      { day: "Thứ 7", breakfast: "Bánh mì thịt nạc", lunch: "Cơm gạo lứt + ức gà", dinner: "Phở gà", snack: "Trái cây", calo: "~1.950" },
+      { day: "Chủ nhật", breakfast: "Cháo thịt bằm", lunch: "Bún chả phần vừa", dinner: "Cá hấp + cơm + rau", snack: "Chuối", calo: "~2.000" },
+    ],
   },
   "Tăng cân": {
-    breakfast: { food: "Bánh mì trứng + Sữa tươi + Chuối", calo: "~601 kcal", note: "Bổ sung nhiều calo, dinh dưỡng dồi dào" },
-    lunch: { food: "Cơm tấm sườn + Trứng gà + Rau luộc", calo: "~905 kcal", note: "Khẩu phần lớn, đủ đạm và tinh bột" },
-    dinner: { food: "Cơm trắng + Thịt bò áp chảo + Trứng gà", calo: "~535 kcal", note: "Giàu protein, hỗ trợ tăng cân lành mạnh" },
+    calories: "2.350 - 2.650 kcal",
+    focus: "Tăng năng lượng",
+    note: "Tăng khẩu phần, thêm bữa phụ giàu dinh dưỡng",
+    description: "Thực đơn tăng cân lành mạnh, bổ sung thêm tinh bột, sữa và đạm trong ngày.",
+    days: [
+      { day: "Thứ 2", breakfast: "Bánh mì trứng + sữa + chuối", lunch: "Cơm tấm sườn + trứng", dinner: "Cơm bò áp chảo + canh", snack: "Sữa chua + hạt", calo: "~2.520" },
+      { day: "Thứ 3", breakfast: "Phở bò + sữa tươi", lunch: "Cơm gà + rau + canh", dinner: "Mì Ý thịt bò", snack: "Chuối + sữa", calo: "~2.480" },
+      { day: "Thứ 4", breakfast: "Xôi gà", lunch: "Cơm cá hồi + khoai lang", dinner: "Cơm thịt kho trứng", snack: "Bánh mì bơ đậu phộng", calo: "~2.620" },
+      { day: "Thứ 5", breakfast: "Yến mạch + sữa + trứng", lunch: "Cơm sườn + rau", dinner: "Bún bò Huế", snack: "Sữa tươi + chuối", calo: "~2.560" },
+      { day: "Thứ 6", breakfast: "Bánh mì thịt + sữa", lunch: "Cơm bò xào + trứng", dinner: "Cơm cá kho + canh", snack: "Sữa chua + trái cây", calo: "~2.430" },
+      { day: "Thứ 7", breakfast: "Cơm chiên trứng", lunch: "Cơm gà xối mỡ phần vừa", dinner: "Lẩu cá + bún", snack: "Sinh tố chuối", calo: "~2.650" },
+      { day: "Chủ nhật", breakfast: "Bún thịt nướng", lunch: "Cơm tấm sườn bì trứng", dinner: "Cơm bò + rau", snack: "Sữa + bánh mì", calo: "~2.600" },
+    ],
   },
   "Tăng cơ": {
-    breakfast: { food: "Yến mạch + Trứng gà x2 + Sữa tươi", calo: "~761 kcal", note: "Giàu protein và carb phức hợp" },
-    lunch: { food: "Cơm gạo lứt + Ức gà luộc + Rau luộc", calo: "~326 kcal", note: "Protein nạc kết hợp tinh bột tốt" },
-    dinner: { food: "Cá hồi áp chảo + Khoai lang + Salad", calo: "~608 kcal", note: "Omega-3, protein chất lượng, carb tốt" },
+    calories: "2.100 - 2.400 kcal",
+    focus: "Giàu protein",
+    note: "Ưu tiên đạm nạc, carb tốt và bữa sau tập",
+    description: "Kế hoạch tăng cơ tập trung protein từ ức gà, cá, trứng, bò và đậu hũ.",
+    days: [
+      { day: "Thứ 2", breakfast: "Yến mạch + 2 trứng + sữa", lunch: "Cơm gạo lứt + ức gà + rau", dinner: "Cá hồi + khoai lang", snack: "Sữa chua Hy Lạp", calo: "~2.180" },
+      { day: "Thứ 3", breakfast: "Bánh mì trứng + sữa", lunch: "Cơm bò áp chảo + rau", dinner: "Ức gà + salad + cơm ít", snack: "Chuối + sữa", calo: "~2.250" },
+      { day: "Thứ 4", breakfast: "Phở bò nhiều thịt", lunch: "Cơm cá hấp + đậu hũ", dinner: "Trứng chiên + rau + khoai", snack: "Sữa tươi", calo: "~2.160" },
+      { day: "Thứ 5", breakfast: "Khoai lang + trứng luộc", lunch: "Cơm gà luộc + rau", dinner: "Thịt bò xào rau + cơm", snack: "Sữa chua + chuối", calo: "~2.220" },
+      { day: "Thứ 6", breakfast: "Yến mạch + sữa + chuối", lunch: "Cơm cá hồi + rau", dinner: "Ức gà áp chảo + khoai", snack: "Trứng luộc", calo: "~2.120" },
+      { day: "Thứ 7", breakfast: "Bún bò phần nhiều thịt", lunch: "Cơm gạo lứt + bò + rau", dinner: "Cá hấp + đậu hũ", snack: "Sữa protein", calo: "~2.350" },
+      { day: "Chủ nhật", breakfast: "Bánh mì ốp la 2 trứng", lunch: "Cơm gà + canh rau", dinner: "Bít tết + khoai lang", snack: "Sữa chua", calo: "~2.300" },
+    ],
   },
 };
 
@@ -606,18 +801,25 @@ function initMenuSuggest() {
 
 function updateMenuSuggest(goal) {
   var data = menuData[goal] || menuData["Giữ cân"];
+  var tbody = document.getElementById("weeklyMenuBody");
 
-  document.getElementById("menuBreakfastFood").textContent = data.breakfast.food;
-  document.getElementById("menuBreakfastCal").textContent = "Calo ước tính: " + data.breakfast.calo;
-  document.getElementById("menuBreakfastNote").textContent = data.breakfast.note;
+  document.getElementById("menuWeeklyCalories").textContent = data.calories;
+  document.getElementById("menuWeeklyFocus").textContent = data.focus;
+  document.getElementById("menuWeeklyNote").textContent = data.note;
+  document.getElementById("menuWeeklyDescription").textContent = data.description;
 
-  document.getElementById("menuLunchFood").textContent = data.lunch.food;
-  document.getElementById("menuLunchCal").textContent = "Calo ước tính: " + data.lunch.calo;
-  document.getElementById("menuLunchNote").textContent = data.lunch.note;
-
-  document.getElementById("menuDinnerFood").textContent = data.dinner.food;
-  document.getElementById("menuDinnerCal").textContent = "Calo ước tính: " + data.dinner.calo;
-  document.getElementById("menuDinnerNote").textContent = data.dinner.note;
+  tbody.innerHTML = "";
+  data.days.forEach(function (item) {
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td><strong>" + item.day + "</strong></td>" +
+      "<td>" + item.breakfast + "</td>" +
+      "<td>" + item.lunch + "</td>" +
+      "<td>" + item.dinner + "</td>" +
+      "<td>" + item.snack + "</td>" +
+      '<td><span class="menu-calorie-pill">' + item.calo + " kcal</span></td>";
+    tbody.appendChild(tr);
+  });
 }
 
 // ===========================

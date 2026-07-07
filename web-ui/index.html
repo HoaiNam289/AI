@@ -131,6 +131,52 @@
 
       <!-- Khu vực cảnh báo -->
       <div id="dash-alert"></div>
+
+      <div class="dashboard-detail-grid">
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h3>Tổng dinh dưỡng hôm nay</h3>
+              <p>Phân bổ macro từ nhật ký ăn uống</p>
+            </div>
+            <span class="dashboard-pill" id="dash-meal-count">0 món</span>
+          </div>
+          <div class="macro-list">
+            <div class="macro-row">
+              <div class="macro-row-top">
+                <span>Protein</span>
+                <strong id="dash-protein">0g</strong>
+              </div>
+              <div class="macro-track"><div class="macro-fill protein" id="dash-protein-bar"></div></div>
+            </div>
+            <div class="macro-row">
+              <div class="macro-row-top">
+                <span>Carb</span>
+                <strong id="dash-carb">0g</strong>
+              </div>
+              <div class="macro-track"><div class="macro-fill carb" id="dash-carb-bar"></div></div>
+            </div>
+            <div class="macro-row">
+              <div class="macro-row-top">
+                <span>Fat</span>
+                <strong id="dash-fat">0g</strong>
+              </div>
+              <div class="macro-track"><div class="macro-fill fat" id="dash-fat-bar"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-header">
+            <div>
+              <h3>Nhật ký gần đây</h3>
+              <p>Các món đã cập nhật trong ngày</p>
+            </div>
+            <span class="dashboard-pill success" id="dash-update-status">Đã cập nhật</span>
+          </div>
+          <div class="recent-meals" id="dash-recent-meals"></div>
+        </div>
+      </div>
     </section>
 
     <!-- ========== 2. HỒ SƠ SỨC KHỎE ========== -->
@@ -243,7 +289,8 @@
         <div class="form-row">
           <div class="form-group" style="flex: 2;">
             <label class="form-label" for="diaryFood">Tên món</label>
-            <select class="form-select" id="diaryFood"></select>
+            <input type="text" class="form-input" id="diaryFood" list="foodSuggestions" placeholder="Nhập tên món, ví dụ: phở, cơm tấm, bánh mì...">
+            <datalist id="foodSuggestions"></datalist>
           </div>
           <div class="form-group" style="flex: 1;">
             <label class="form-label" for="diaryQty">Số phần</label>
@@ -254,6 +301,10 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Thêm vào nhật ký
         </button>
+        <div class="diary-suggestion-box" id="diarySuggestionBox">
+          Gợi ý: nhập tên món để xem calo và dinh dưỡng ước tính.
+        </div>
+        <p class="form-status" id="diaryAddStatus"></p>
       </div>
 
       <!-- Bảng nhật ký -->
@@ -377,34 +428,45 @@
         </select>
       </div>
 
-      <!-- 3 bữa -->
-      <div class="card-grid-3" id="menuCards">
-        <div class="meal-card">
-          <div class="meal-card-header">
-            <svg class="meal-icon" viewBox="0 0 24 24" fill="none" stroke="#F9A825" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            Bữa sáng
-          </div>
-          <div class="meal-card-food" id="menuBreakfastFood">--</div>
-          <div class="meal-card-cal" id="menuBreakfastCal">--</div>
-          <div class="meal-card-note" id="menuBreakfastNote">--</div>
+      <div class="menu-summary-grid">
+        <div class="menu-summary-card">
+          <span class="menu-summary-label">Kế hoạch</span>
+          <strong>7 ngày</strong>
+          <small>Sáng - Trưa - Tối - Phụ</small>
         </div>
-        <div class="meal-card">
-          <div class="meal-card-header">
-            <svg class="meal-icon" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Bữa trưa
-          </div>
-          <div class="meal-card-food" id="menuLunchFood">--</div>
-          <div class="meal-card-cal" id="menuLunchCal">--</div>
-          <div class="meal-card-note" id="menuLunchNote">--</div>
+        <div class="menu-summary-card">
+          <span class="menu-summary-label">Calo/ngày</span>
+          <strong id="menuWeeklyCalories">--</strong>
+          <small>Ước tính theo mục tiêu</small>
         </div>
-        <div class="meal-card">
-          <div class="meal-card-header">
-            <svg class="meal-icon" viewBox="0 0 24 24" fill="none" stroke="#5C6BC0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            Bữa tối
+        <div class="menu-summary-card">
+          <span class="menu-summary-label">Nguyên tắc</span>
+          <strong id="menuWeeklyFocus">--</strong>
+          <small id="menuWeeklyNote">--</small>
+        </div>
+      </div>
+
+      <div class="weekly-menu-card">
+        <div class="weekly-menu-header">
+          <div>
+            <h3>Thực đơn gợi ý trong tuần</h3>
+            <p id="menuWeeklyDescription">--</p>
           </div>
-          <div class="meal-card-food" id="menuDinnerFood">--</div>
-          <div class="meal-card-cal" id="menuDinnerCal">--</div>
-          <div class="meal-card-note" id="menuDinnerNote">--</div>
+        </div>
+        <div class="weekly-menu-table-wrapper">
+          <table class="weekly-menu-table">
+            <thead>
+              <tr>
+                <th>Ngày</th>
+                <th>Bữa sáng</th>
+                <th>Bữa trưa</th>
+                <th>Bữa tối</th>
+                <th>Bữa phụ</th>
+                <th>Calo</th>
+              </tr>
+            </thead>
+            <tbody id="weeklyMenuBody"></tbody>
+          </table>
         </div>
       </div>
     </section>
