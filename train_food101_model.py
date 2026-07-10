@@ -6,26 +6,23 @@ from tensorflow.keras import layers, models
 from tensorflow.keras.applications import EfficientNetB0
 from tensorflow.keras.applications.efficientnet import preprocess_input
 
-# =========================
-# 1. CẤU HÌNH VÀ THIẾT LẬP (BẢN ĐẠI TU: HỌC BỔ TÚC + ĐÁNH LỪA THỊ GIÁC)
-# =========================
-DATA_DIR = 'C:/AI_Data/tfds_data'  # Kho chứa dữ liệu gốc từ Google
-LOCAL_DATA_DIR = 'C:/AI_Data/local_data' # Kho chứa ảnh Việt Nam do bạn tự thêm
+
+DATA_DIR = 'C:/AI_Data/tfds_data'
+LOCAL_DATA_DIR = 'C:/AI_Data/local_data'
 MODEL_DIR = "model"
 IMG_SIZE = (224, 224)
 BATCH_SIZE = 32
-EPOCHS = 10 
+EPOCHS = 10
 
 os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(DATA_DIR, exist_ok=True)
 os.environ['TFDS_DATA_DIR'] = DATA_DIR
 
-# Kích hoạt sức mạnh của card RTX 4050
+
 gpus = tf.config.list_physical_devices('GPU')
 if gpus:
     print(f"✅ Đã tìm thấy GPU: {gpus}. Bắt đầu tăng tốc!")
 
-# Danh sách chuẩn khớp 100% với từ điển của bạn
 SELECTED_CLASSES = [
     "pho", "fried_rice", "pizza", "sushi", 
     "hamburger", "chicken_wings", "greek_salad", "ice_cream", "donuts",
@@ -40,9 +37,7 @@ for split in ["train", "val"]:
     for c in SELECTED_CLASSES:
         os.makedirs(os.path.join(LOCAL_DATA_DIR, split, c), exist_ok=True)
 
-# ==========================================
-# 2. XÂY DỰNG LỚP ĐÁNH LỪA THỊ GIÁC (DATA AUGMENTATION)
-# ==========================================
+
 data_augmentation = tf.keras.Sequential([
     layers.RandomFlip("horizontal"),       # Lật ảnh trái phải ngẫu nhiên
     layers.RandomRotation(0.15),           # Xoay nghiêng 15%
@@ -50,9 +45,6 @@ data_augmentation = tf.keras.Sequential([
     layers.RandomContrast(0.15)            # Chỉnh sáng tối ngẫu nhiên
 ])
 
-# =========================
-# 3. LOAD VÀ TIỀN XỬ LÝ DỮ LIỆU GỐC
-# =========================
 print("Đang quét dữ liệu từ ổ C, vui lòng đợi...")
 (ds_train, ds_val), ds_info = tfds.load(
     "food101",
@@ -80,9 +72,6 @@ def preprocess(image, label):
 tfds_train_ds = ds_train.filter(filter_selected_classes).map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
 tfds_val_ds = ds_val.filter(filter_selected_classes).map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)
 
-# ==========================================
-# 4. KIỂM TRA VÀ TRỘN DỮ LIỆU HỌC BỔ TÚC
-# ==========================================
 def check_local_data(folder_path):
     for c in SELECTED_CLASSES:
         p = os.path.join(folder_path, c)
@@ -121,9 +110,6 @@ val_ds = val_ds.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 with open(os.path.join(MODEL_DIR, "food101_class_names.json"), "w", encoding="utf-8") as f:
     json.dump(SELECTED_CLASSES, f, ensure_ascii=False, indent=4)
 
-# =========================
-# 5. XÂY DỰNG MẠNG NEURAL (BỘ NÃO)
-# =========================
 base_model = EfficientNetB0(input_shape=(224, 224, 3), include_top=False, weights="imagenet")
 base_model.trainable = False
 
@@ -138,14 +124,8 @@ outputs = layers.Dense(len(SELECTED_CLASSES), activation="softmax")(x)
 model = models.Model(inputs, outputs)
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0005), loss="categorical_crossentropy", metrics=["accuracy"])
 
-# =========================
-# 6. BẮT ĐẦU HUẤN LUYỆN
-# =========================
+
 print(f"\n🚀 Bắt đầu quá trình huấn luyện nâng cao {len(SELECTED_CLASSES)} món ăn...")
 model.fit(train_ds, validation_data=val_ds, epochs=EPOCHS)
 
-# =========================
-# 7. LƯU THÀNH QUẢ
-# =========================
 model.save(os.path.join(MODEL_DIR, "food101_model.keras"))
-print("\n🎉 Đại tu hoàn tất! File food101_model.keras siêu cấp đã sẵn sàng lên sóng.")

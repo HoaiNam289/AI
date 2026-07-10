@@ -1,0 +1,309 @@
+{
+  "goal_plans": {
+    "Giảm cân": {
+      "description": "Thực đơn giảm cân ưu tiên món ít calo, giàu protein, nhiều rau xanh và hạn chế đường, dầu mỡ.",
+      "breakfast": [
+        {
+          "name": "Yến mạch + chuối + sữa chua không đường",
+          "calories": 350,
+          "note": "No lâu, ít calo, phù hợp buổi sáng."
+        },
+        {
+          "name": "Khoai lang + trứng luộc + táo",
+          "calories": 330,
+          "note": "Cung cấp tinh bột tốt và protein."
+        },
+        {
+          "name": "Bánh mì đen + trứng + rau xanh",
+          "calories": 380,
+          "note": "Cân bằng giữa tinh bột và đạm."
+        }
+      ],
+      "lunch": [
+        {
+          "name": "Cơm gạo lứt + ức gà luộc + rau luộc",
+          "calories": 550,
+          "note": "Giàu protein, phù hợp kiểm soát cân nặng."
+        },
+        {
+          "name": "Salad ức gà + khoai lang",
+          "calories": 500,
+          "note": "Ít dầu mỡ, nhiều chất xơ."
+        },
+        {
+          "name": "Cá hấp + cơm gạo lứt + rau xanh",
+          "calories": 520,
+          "note": "Nhẹ bụng, đủ năng lượng."
+        }
+      ],
+      "dinner": [
+        {
+          "name": "Cá hấp + salad rau củ",
+          "calories": 420,
+          "note": "Bữa tối nhẹ, hạn chế tinh bột."
+        },
+        {
+          "name": "Đậu hũ + rau luộc + ít cơm gạo lứt",
+          "calories": 430,
+          "note": "Phù hợp người muốn giảm calo buổi tối."
+        },
+        {
+          "name": "Ức gà áp chảo + rau xanh",
+          "calories": 450,
+          "note": "Giàu đạm, ít chất béo."
+        }
+      ],
+      "snack": [
+        {
+          "name": "Táo",
+          "calories": 80,
+          "note": "Ít calo, dễ ăn."
+        },
+        {
+          "name": "Sữa chua không đường",
+          "calories": 90,
+          "note": "Tốt cho tiêu hóa."
+        },
+        {
+          "name": "Chuối nhỏ",
+          "calories": 100,
+          "note": "Bổ sung năng lượng nhẹ."
+        }
+      ],
+      "avoid": [
+        "Trà sữa",
+        "Nước ngọt",
+        "Gà rán",
+        "Bánh ngọt",
+        "Khoai tây chiên"
+      ]
+    },
+
+    "Giữ cân": {
+      "description": "Thực đơn giữ cân ưu tiên cân bằng giữa tinh bột, đạm, chất béo và rau xanh.",
+      "breakfast": [
+        {
+          "name": "Bánh mì trứng + sữa tươi không đường",
+          "calories": 480,
+          "note": "Đủ năng lượng cho buổi sáng."
+        },
+        {
+          "name": "Yến mạch + trái cây + sữa chua",
+          "calories": 430,
+          "note": "Cân bằng và dễ tiêu hóa."
+        },
+        {
+          "name": "Phở bò phần vừa",
+          "calories": 500,
+          "note": "Có thể dùng nếu kiểm soát khẩu phần."
+        }
+      ],
+      "lunch": [
+        {
+          "name": "Cơm trắng + cá hấp + rau luộc",
+          "calories": 650,
+          "note": "Bữa trưa cân bằng."
+        },
+        {
+          "name": "Cơm gạo lứt + thịt bò + rau xanh",
+          "calories": 680,
+          "note": "Giàu đạm, phù hợp duy trì sức khỏe."
+        },
+        {
+          "name": "Cơm chiên phần nhỏ + salad",
+          "calories": 620,
+          "note": "Nên ăn khẩu phần vừa phải."
+        }
+      ],
+      "dinner": [
+        {
+          "name": "Cơm trắng + đậu hũ + rau củ",
+          "calories": 520,
+          "note": "Nhẹ nhàng, đủ chất."
+        },
+        {
+          "name": "Mì ramen phần vừa + rau",
+          "calories": 550,
+          "note": "Nên hạn chế nước dùng quá mặn."
+        },
+        {
+          "name": "Sushi + salad rau củ",
+          "calories": 500,
+          "note": "Bữa tối gọn nhẹ."
+        }
+      ],
+      "snack": [
+        {
+          "name": "Chuối",
+          "calories": 100,
+          "note": "Bổ sung năng lượng nhẹ."
+        },
+        {
+          "name": "Sữa tươi không đường",
+          "calories": 120,
+          "note": "Bổ sung canxi và protein."
+        },
+        {
+          "name": "Táo",
+          "calories": 80,
+          "note": "Ít calo, nhiều chất xơ."
+        }
+      ],
+      "avoid": [
+        "Ăn khuya thường xuyên",
+        "Ăn quá nhiều đồ ngọt",
+        "Uống nhiều nước ngọt"
+      ]
+    },
+
+    "Tăng cân": {
+      "description": "Thực đơn tăng cân ưu tiên tăng năng lượng, tăng khẩu phần và chia nhiều bữa trong ngày.",
+      "breakfast": [
+        {
+          "name": "Bánh mì trứng + sữa tươi + chuối",
+          "calories": 650,
+          "note": "Giàu năng lượng, dễ ăn."
+        },
+        {
+          "name": "Yến mạch + sữa + chuối + bơ đậu phộng",
+          "calories": 700,
+          "note": "Tốt cho người cần tăng cân lành mạnh."
+        },
+        {
+          "name": "Cơm trắng + trứng chiên + sữa",
+          "calories": 680,
+          "note": "Năng lượng cao, dễ chuẩn bị."
+        }
+      ],
+      "lunch": [
+        {
+          "name": "Cơm tấm sườn + trứng + canh rau",
+          "calories": 850,
+          "note": "Nhiều năng lượng, phù hợp tăng cân."
+        },
+        {
+          "name": "Cơm trắng + thịt bò + trứng + rau",
+          "calories": 820,
+          "note": "Giàu đạm và tinh bột."
+        },
+        {
+          "name": "Cơm chiên + gà + sữa tươi",
+          "calories": 800,
+          "note": "Bổ sung năng lượng tốt."
+        }
+      ],
+      "dinner": [
+        {
+          "name": "Cơm trắng + cá hồi + rau + sữa",
+          "calories": 750,
+          "note": "Có chất béo tốt và protein."
+        },
+        {
+          "name": "Mì Ý + thịt bò + salad",
+          "calories": 780,
+          "note": "Giàu năng lượng."
+        },
+        {
+          "name": "Cơm trắng + sườn heo + rau xanh",
+          "calories": 760,
+          "note": "Phù hợp người cần tăng khẩu phần."
+        }
+      ],
+      "snack": [
+        {
+          "name": "Sữa tươi + chuối",
+          "calories": 250,
+          "note": "Bữa phụ đơn giản, dễ uống."
+        },
+        {
+          "name": "Bánh mì kẹp",
+          "calories": 300,
+          "note": "Tăng năng lượng giữa buổi."
+        },
+        {
+          "name": "Sữa chua + yến mạch",
+          "calories": 280,
+          "note": "Bổ sung thêm calo lành mạnh."
+        }
+      ],
+      "avoid": [
+        "Bỏ bữa",
+        "Ăn quá ít tinh bột",
+        "Chỉ uống nước ngọt để tăng calo"
+      ]
+    },
+
+    "Tăng cơ": {
+      "description": "Thực đơn tăng cơ ưu tiên protein cao, đủ calo và phù hợp khi kết hợp tập luyện.",
+      "breakfast": [
+        {
+          "name": "Yến mạch + trứng gà + sữa tươi",
+          "calories": 550,
+          "note": "Giàu protein, phù hợp trước ngày tập."
+        },
+        {
+          "name": "Bánh mì trứng + sữa không đường",
+          "calories": 520,
+          "note": "Cung cấp đạm và năng lượng."
+        },
+        {
+          "name": "Khoai lang + ức gà + chuối",
+          "calories": 500,
+          "note": "Tinh bột tốt, phù hợp tập luyện."
+        }
+      ],
+      "lunch": [
+        {
+          "name": "Cơm gạo lứt + ức gà + rau luộc",
+          "calories": 650,
+          "note": "Giàu protein, ít dầu mỡ."
+        },
+        {
+          "name": "Cơm trắng + thịt bò áp chảo + rau",
+          "calories": 700,
+          "note": "Bổ sung protein và sắt."
+        },
+        {
+          "name": "Cơm gạo lứt + cá hồi + salad",
+          "calories": 720,
+          "note": "Giàu protein và chất béo tốt."
+        }
+      ],
+      "dinner": [
+        {
+          "name": "Cá hấp + khoai lang + salad",
+          "calories": 580,
+          "note": "Bữa tối nhẹ nhưng đủ protein."
+        },
+        {
+          "name": "Ức gà luộc + cơm gạo lứt + rau xanh",
+          "calories": 620,
+          "note": "Phù hợp phục hồi cơ."
+        },
+        {
+          "name": "Đậu hũ + trứng + rau + cơm",
+          "calories": 600,
+          "note": "Nguồn đạm đa dạng."
+        }
+      ],
+      "snack": [
+        {
+          "name": "Sữa tươi không đường",
+          "calories": 120,
+          "note": "Bổ sung protein nhẹ."
+        },
+        {
+          "name": "Trứng luộc",
+          "calories": 80,
+          "note": "Nguồn protein đơn giản."
+        },
+        {
+          "name": "Chuối",
+          "calories": 100,
+          "note": "Bổ sung năng lượng trước/sau tập."
+        }
+      ],
+      "avoid": ["Thiếu protein", "Bỏ bữa sau khi tập", "Ăn quá nhiều đồ chiên"]
+    }
+  }
+}

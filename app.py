@@ -64,9 +64,6 @@ from transformers import pipeline
 from datetime import datetime
 
 
-# =========================
-# DỮ LIỆU MÓN ĂN MẪU
-# =========================
 foods_data = [
     {"Tên món": "Cơm trắng", "Calo": 130, "Protein": 2.7, "Carb": 28, "Fat": 0.3, "Nhóm": "Tinh bột", "Phù hợp": "Giữ cân"},
     {"Tên món": "Ức gà luộc", "Calo": 165, "Protein": 31, "Carb": 0, "Fat": 3.6, "Nhóm": "Đạm", "Phù hợp": "Giảm cân"},
@@ -121,13 +118,7 @@ foods_data = [
 ]
 
 foods_df = pd.DataFrame(foods_data)
-# =========================
-# AI NHẬN DIỆN MÓN ĂN KHÔNG CẦN TRAIN
-# Dùng CLIP zero-shot image classification
-# =========================
-# =========================
-# NHẬN DIỆN MÓN ĂN FOOD-101
-# =========================
+
 FOOD101_MODEL_PATH = "model/food101_model.keras"
 FOOD101_CLASS_PATH = "model/food101_class_names.json"   
 

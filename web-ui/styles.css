@@ -802,6 +802,29 @@ tfoot td {
   color: var(--text);
 }
 
+#topPredictResults {
+  margin-top: 14px;
+}
+
+#topPredictResults h4 {
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.top-result-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border-light);
+  font-size: 0.88rem;
+}
+
+.top-result-item strong {
+  color: var(--primary-dark);
+}
+
 /* --- Menu Cards (Gợi ý thực đơn) --- */
 .meal-card {
   background:
@@ -980,6 +1003,7 @@ tfoot td {
   font-size: 0.9rem;
   line-height: 1.5;
   word-wrap: break-word;
+  white-space: pre-line;
   box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
 }
 
@@ -996,6 +1020,58 @@ tfoot td {
   color: var(--text);
   border-bottom-left-radius: var(--radius-sm);
   border: 1px solid var(--border-light);
+}
+
+.chat-card {
+  display: grid;
+  gap: 8px;
+}
+
+.chat-card-title {
+  font-weight: 800;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.chat-card-summary,
+.chat-card-note {
+  margin: 0;
+  color: var(--text-light);
+}
+
+.chat-card-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.chat-card-list li {
+  padding-left: 2px;
+}
+
+.chat-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.chat-action-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #ffffff;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2);
+}
+
+.chat-action-btn:hover {
+  background: linear-gradient(135deg, #16a34a, #166534);
 }
 
 .chat-input-area {

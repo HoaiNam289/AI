@@ -365,48 +365,52 @@
         </div>
         <p class="upload-text">Kéo thả ảnh vào đây hoặc <strong>nhấn để chọn ảnh</strong></p>
         <p class="upload-text" style="font-size: 0.8rem; margin-top: 4px; color: #999;">Hỗ trợ: JPG, PNG</p>
-        <input type="file" class="upload-input" id="uploadInput" accept="image/jpeg,image/png">
+        <input type="file" class="upload-input" id="foodImageInput" accept="image/png, image/jpeg, image/jpg">
       </div>
 
       <!-- Preview ảnh -->
       <div class="image-preview" id="imagePreview" style="display: none;">
-        <img id="previewImg" alt="Ảnh món ăn đã upload">
-        <button class="btn btn-primary" style="margin-top: 12px;" id="btnRecognize">
+        <img id="foodImagePreview" alt="Ảnh món ăn đã upload">
+        <button class="btn btn-primary" style="margin-top: 12px;" id="predictFoodBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           Nhận diện món ăn
         </button>
       </div>
 
       <!-- Kết quả nhận diện -->
-      <div class="result-box" id="recognitionResult" style="display: none;">
+      <div class="result-box" id="predictResult" style="display: none;">
         <h3 class="section-subtitle" style="margin-top: 0;">Kết quả nhận diện</h3>
         <div class="result-item">
           <span class="result-item-label">Món ăn dự đoán</span>
-          <span class="result-item-value" id="recFood">--</span>
+          <span class="result-item-value" id="predictedFoodName">--</span>
         </div>
         <div class="result-item">
           <span class="result-item-label">Độ tin cậy</span>
-          <span class="result-item-value" id="recConfidence">--</span>
+          <span class="result-item-value" id="predictedConfidence">--</span>
         </div>
         <div class="result-item">
           <span class="result-item-label">Calo ước tính</span>
-          <span class="result-item-value" id="recCalo">--</span>
+          <span class="result-item-value" id="predictedCalories">--</span>
         </div>
         <div class="result-item">
           <span class="result-item-label">Protein</span>
-          <span class="result-item-value" id="recProtein">--</span>
+          <span class="result-item-value" id="predictedProtein">--</span>
         </div>
         <div class="result-item">
           <span class="result-item-label">Carb</span>
-          <span class="result-item-value" id="recCarb">--</span>
+          <span class="result-item-value" id="predictedCarb">--</span>
         </div>
         <div class="result-item">
           <span class="result-item-label">Fat</span>
-          <span class="result-item-value" id="recFat">--</span>
+          <span class="result-item-value" id="predictedFat">--</span>
         </div>
         <div style="margin-top: 12px;">
           <div class="alert" id="recComment"></div>
         </div>
+        <button class="btn btn-primary" style="margin-top: 12px;" id="addPredictedFoodBtn">
+          Thêm vào nhật ký
+        </button>
+        <div id="topPredictResults"></div>
       </div>
     </section>
 
@@ -480,10 +484,10 @@
 
       <!-- Câu hỏi mẫu -->
       <div class="sample-questions" id="sampleQuestions">
-        <button class="sample-q-btn">Tôi muốn giảm cân thì nên ăn gì?</button>
-        <button class="sample-q-btn">Tối nay tôi nên ăn gì để không vượt calo?</button>
-        <button class="sample-q-btn">BMI của tôi có ổn không?</button>
-        <button class="sample-q-btn">Tôi muốn tăng cơ thì nên ăn món gì?</button>
+        <button class="sample-q-btn">Hôm nay tôi ăn thế nào?</button>
+        <button class="sample-q-btn">Tôi còn bao nhiêu calo?</button>
+        <button class="sample-q-btn">Bữa tối nên ăn gì?</button>
+        <button class="sample-q-btn">Protein hôm nay đủ chưa?</button>
       </div>
 
       <!-- Khung chat -->
@@ -510,6 +514,6 @@
     NutriCare AI &copy; 2025 — Đồ án Trí tuệ nhân tạo
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=recognition-api-2"></script>
 </body>
 </html>

@@ -5,3 +5,6 @@ pillow
 numpy
 tensorflow
 tensorflow-datasets
+fastapi
+uvicorn
+python-multipart
